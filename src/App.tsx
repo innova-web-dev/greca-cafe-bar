@@ -10,7 +10,12 @@ export default function App() {
       <main className="min-h-screen font-sans">
         <ScrollExpandMedia
           mediaType="video"
-          mediaSrc="/videocafe.mp4"
+          mediaSrc={{
+            webm: "/videocafe.webm",
+            mp4: "/videocafe.mp4"
+          }}
+          posterSrc="/poster.avif"
+          bgImageSrc="/arepa.png"
           className="bg-green-dark"
           textBlend
         />

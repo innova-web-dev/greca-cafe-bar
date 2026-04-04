@@ -1,0 +1,54 @@
+# GRECA Café Bar — Contexto para LLMs (IA)
+
+Este documento proporciona el contexto arquitectónico y de diseño necesario para que los modelos de lenguaje (LLMs) puedan asistir con precisión en el desarrollo y mantenimiento del proyecto **GRECA Café Bar**.
+
+## 🏗️ Resumen del Proyecto
+- **Tipo**: Aplicación Web de Menú Digital para un Café/Bar de especialidad.
+- **Ambiente**: Moderno, premium, acogedor.
+- **Tecnologías**: React, Vite, Framer Motion, Tailwind CSS, Lucide React.
+
+---
+
+## 📂 Estructura de Archivos Críticos
+- `src/main.tsx`: Punto de entrada de la aplicación.
+- `src/App.tsx`: Layout principal con componentes de alto nivel.
+- `src/data/menuData.ts`: Fuente de verdad para el contenido del menú (Categorías, Artículos, Precios).
+- `src/components/MenuSection.tsx`: Lógica de renderizado y filtrado dinámico del menú.
+- `src/components/scroll-expansion-hero.tsx`: Componente hero interactivo con video y expansión.
+- `index.html`: Contiene TODOS los metadatos de SEO, Open Graph y JSON-LD.
+
+---
+
+## 🎨 Sistema de Diseño (Tokens)
+- **Colores de Marca**:
+    - `green-dark`: `#203428` (Bosque Profundo)
+    - `terracotta`: `#A65F46` (Terracota)
+    - `cream`: `#FDFCF9` (Fondo principal)
+- **Tipografía**: Utiliza variables CSS para `var(--font-heading)`, `var(--font-body)` y `var(--font-cursive)`.
+- **Estética**: Bordes redondeados generosos (`rounded-3xl`), sombras suaves, efectos de glassmorphism (`backdrop-blur-xl`).
+
+---
+
+## 🍽️ Estructura de Datos (MenuData.ts)
+Cada categoría sigue el esquema `MenuCategory`:
+```typescript
+interface MenuCategory {
+  id: string;
+  title: string;
+  image: string;
+  items?: MenuItem[];
+  subcategories?: SubCategory[];
+}
+```
+
+---
+
+## 🛠️ Directrices para el AI / Desarrollador
+1.  **Mantener el Tono**: Cualquier texto o descripción debe sonar elegante, acogedor y profesional ("Premium Artisanal").
+2.  **Animaciones**: Usar `framer-motion` para todas las transiciones (preferir curvas de suavizado tipo `[0.22, 1, 0.36, 1]`).
+3.  **Responsividad**: Priorizar siempre la visualización móvil (`max-w-xl` suele ser el contenedor principal del contenido).
+4.  **SEO**: Si se añade una nueva página o sección, actualizar `index.html` y la imagen OG si es necesario.
+
+---
+
+*Para detalles completos sobre componentes específicos, consulte la carpeta `src/components/`.*

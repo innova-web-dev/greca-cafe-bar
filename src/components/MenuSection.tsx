@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { menuCategories, filterTabs, type FilterValue, type MenuCategory } from '../data/menuData';
 import LiquidGlassButton from './LiquidGlassButton';
@@ -129,10 +129,11 @@ function CategoryCard({ category, index }: { category: MenuCategory; index: numb
 export default function MenuSection() {
   const [activeFilter, setActiveFilter] = useState<FilterValue>('all');
 
-  const filtered =
-    activeFilter === 'all'
+  const filtered = useMemo(() => {
+    return activeFilter === 'all'
       ? menuCategories
       : menuCategories.filter((c) => c.id === activeFilter);
+  }, [activeFilter]);
 
   return (
     <section id="menu" className="bg-cream min-h-screen pb-28 mt-[-1px]">

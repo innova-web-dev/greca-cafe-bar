@@ -14,19 +14,35 @@ export default function BottomNav() {
   const [cursorProps, setCursorProps] = useState({ left: 0, width: 0, opacity: 0 });
 
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      // Show nav after scrolling past hero
-      setVisible(window.scrollY > window.innerHeight * 0.5);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          // Show nav after scrolling past hero
+          setVisible(window.scrollY > window.innerHeight * 0.5);
 
-      // Determine active section
-      const sections = navItems.map((item) => {
-        const el = document.getElementById(item.id);
-        if (!el) return { id: item.id, top: Infinity };
-        const rect = el.getBoundingClientRect();
-        return { id: item.id, top: Math.abs(rect.top) };
-      });
-      const closest = sections.reduce((a, b) => (a.top < b.top ? a : b));
-      setActiveSection(closest.id);
+          // Determine active section using a fast loop
+          let minTop = Infinity;
+          let closestId = navItems[0].id;
+
+          for (let i = 0; i < navItems.length; i++) {
+            const item = navItems[i];
+            const el = document.getElementById(item.id);
+            if (el) {
+              const rect = el.getBoundingClientRect();
+              const absTop = Math.abs(rect.top);
+              if (absTop < minTop) {
+                minTop = absTop;
+                closestId = item.id;
+              }
+            }
+          }
+
+          setActiveSection(closestId);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -34,14 +50,19 @@ export default function BottomNav() {
   }, []);
 
   useEffect(() => {
-    const activeIndex = navItems.findIndex(item => item.id === activeSection);
-    if (activeIndex !== -1) {
-      const el = document.getElementById(`nav-btn-${navItems[activeIndex].id}`);
-      if (el) {
-        const { width } = el.getBoundingClientRect();
-        setCursorProps({ left: el.offsetLeft, width, opacity: 1 });
+    // We intentionally delay state setting using requestAnimationFrame
+    // to avoid synchronous setState inside useEffect cascading re-renders
+    const rafId = window.requestAnimationFrame(() => {
+      const activeIndex = navItems.findIndex(item => item.id === activeSection);
+      if (activeIndex !== -1) {
+        const el = document.getElementById(`nav-btn-${navItems[activeIndex].id}`);
+        if (el) {
+          const { width } = el.getBoundingClientRect();
+          setCursorProps({ left: el.offsetLeft, width, opacity: 1 });
+        }
       }
-    }
+    });
+    return () => window.cancelAnimationFrame(rafId);
   }, [activeSection, visible]);
 
   const scrollTo = (id: string) => {

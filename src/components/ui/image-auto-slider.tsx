@@ -24,23 +24,14 @@ export const ImageAutoSlider = ({
 
   return (
     <section className={`w-full overflow-hidden py-12 ${className}`}>
-      <style dangerouslySetInnerHTML={{ __html: `
-        @keyframes scroll-right {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-        .infinite-scroll-animate {
-          animation: scroll-right ${animationDuration} linear infinite;
-        }
-        .scroll-mask {
-          mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
-          -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
-        }
-      `}} />
-      
       <div className="relative z-10 w-full flex items-center justify-center">
         <div className="scroll-mask w-full">
-          <div className="infinite-scroll-animate flex gap-6 w-max px-6">
+          <div
+            className="flex gap-6 w-max px-6"
+            style={{
+              animation: `scroll-right ${animationDuration} linear infinite`
+            }}
+          >
             {duplicatedImages.map((image, index) => (
               <div
                 key={`${index}-${image}`}

@@ -7,10 +7,17 @@ import {
   type ReactNode,
 } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import CanvasFramePlayer from './CanvasFramePlayer';
 
 interface ScrollExpandMediaProps {
-  mediaType?: 'video' | 'image';
-  mediaSrc: string | { mp4?: string; webm?: string };
+  mediaType?: 'video' | 'image' | 'canvas-sequence';
+  mediaSrc?: string | { mp4?: string; webm?: string };
+  frameSequence?: {
+    frameCount?: number;
+    fps?: number;
+    prefix?: string;
+    extension?: string;
+  };
   posterSrc?: string;
   bgImageSrc?: string;
   title?: string;
@@ -25,6 +32,7 @@ interface ScrollExpandMediaProps {
 const ScrollExpandMedia = ({
   mediaType = 'video',
   mediaSrc,
+  frameSequence,
   posterSrc,
   bgImageSrc,
   title,
@@ -97,6 +105,8 @@ const ScrollExpandMedia = ({
 
   const bgOpacity = useTransform(smoothProgress, [0, 0.5], [1, 0]);
   const contentOpacity = useTransform(smoothProgress, [0.8, 1], [0, 1]);
+  const videoOverlayOpacity = useTransform(smoothProgress, [0, 1], [0.8, 0.4]);
+  const imageOverlayOpacity = useTransform(smoothProgress, [0, 1], [0.8, 0.5]);
 
   return (
     <div
@@ -134,7 +144,22 @@ const ScrollExpandMedia = ({
                     y: '-50%'
                   }}
                 >
-                  {mediaType === 'video' ? (
+                  {mediaType === 'canvas-sequence' || frameSequence ? (
+                    <div className='relative w-full h-full pointer-events-none'>
+                      <CanvasFramePlayer
+                        frameCount={frameSequence?.frameCount ?? 144}
+                        fps={frameSequence?.fps ?? 18}
+                        framePrefix={frameSequence?.prefix ?? '/frames/frame_'}
+                        frameExtension={frameSequence?.extension ?? '.webp'}
+                        posterSrc={posterSrc}
+                        className='w-full h-full rounded-xl'
+                      />
+                      <motion.div
+                        className='absolute inset-0 bg-black rounded-xl'
+                        style={{ opacity: videoOverlayOpacity }}
+                      />
+                    </div>
+                  ) : mediaType === 'video' ? (
                     typeof mediaSrc === 'string' && mediaSrc.includes('youtube.com') ? (
                       <div className='relative w-full h-full pointer-events-none'>
                         <iframe
@@ -155,7 +180,7 @@ const ScrollExpandMedia = ({
                         />
                         <motion.div
                           className='absolute inset-0 bg-black rounded-xl'
-                          style={{ opacity: useTransform(smoothProgress, [0, 1], [0.8, 0.4]) }}
+                          style={{ opacity: videoOverlayOpacity }}
                         />
                       </div>
                     ) : (
@@ -184,20 +209,20 @@ const ScrollExpandMedia = ({
                         </video>
                         <motion.div
                           className='absolute inset-0 bg-black rounded-xl'
-                          style={{ opacity: useTransform(smoothProgress, [0, 1], [0.8, 0.4]) }}
+                          style={{ opacity: videoOverlayOpacity }}
                         />
                       </div>
                     )
                   ) : (
                     <div className='relative w-full h-full'>
                       <img
-                        src={typeof mediaSrc === 'string' ? mediaSrc : mediaSrc.mp4}
+                        src={typeof mediaSrc === 'string' ? mediaSrc : mediaSrc?.mp4 || ''}
                         alt={title || 'Media content'}
                         className='w-full h-full object-cover rounded-xl'
                       />
                       <motion.div
                         className='absolute inset-0 bg-black rounded-xl'
-                        style={{ opacity: useTransform(smoothProgress, [0, 1], [0.8, 0.5]) }}
+                        style={{ opacity: imageOverlayOpacity }}
                       />
                     </div>
                   )}

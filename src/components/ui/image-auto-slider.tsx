@@ -7,12 +7,12 @@ interface ImageAutoSliderProps {
 
 export const ImageAutoSlider = ({ 
   images = [
-    "/arepa.png",
-    "/frappe.jpg",
+    "/arepa.webp",
+    "/frappe.webp",
     "/plato1.avif",
     "/plato2.avif",
     "/plato3.avif",
-    "/tenders.jpg",
+    "/tenders.webp",
     "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=1974&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=2070&auto=format&fit=crop"
   ],

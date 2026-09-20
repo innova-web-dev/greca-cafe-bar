@@ -39,7 +39,10 @@ export default function BottomNav() {
       const el = document.getElementById(`nav-btn-${navItems[activeIndex].id}`);
       if (el) {
         const { width } = el.getBoundingClientRect();
-        setCursorProps({ left: el.offsetLeft, width, opacity: 1 });
+        const frame = requestAnimationFrame(() => {
+          setCursorProps({ left: el.offsetLeft, width, opacity: 1 });
+        });
+        return () => cancelAnimationFrame(frame);
       }
     }
   }, [activeSection, visible]);

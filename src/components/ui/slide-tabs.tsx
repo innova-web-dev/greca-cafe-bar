@@ -1,6 +1,12 @@
 import React, { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
+interface Position {
+  left: number;
+  width: number;
+  opacity: number;
+}
+
 interface SlideTabsProps {
   tabs: string[];
   activeTab?: number;
@@ -9,29 +15,33 @@ interface SlideTabsProps {
 }
 
 export const SlideTabs = ({ tabs, activeTab = 0, onTabChange, className = "" }: SlideTabsProps) => {
-  const [position, setPosition] = useState({
+  const [position, setPosition] = useState<Position>({
     left: 0,
     width: 0,
     opacity: 0,
   });
   
+  const [prevActiveTab, setPrevActiveTab] = useState(activeTab);
   const [selected, setSelected] = useState(activeTab);
   const tabsRef = useRef<(HTMLLIElement | null)[]>([]);
 
-  // Keep internal state in sync with prop if provided
-  useEffect(() => {
+  if (activeTab !== prevActiveTab) {
+    setPrevActiveTab(activeTab);
     setSelected(activeTab);
-  }, [activeTab]);
+  }
 
   useEffect(() => {
     const selectedTab = tabsRef.current[selected];
     if (selectedTab) {
       const { width } = selectedTab.getBoundingClientRect();
-      setPosition({
-        left: selectedTab.offsetLeft,
-        width,
-        opacity: 1,
+      const frame = requestAnimationFrame(() => {
+        setPosition({
+          left: selectedTab.offsetLeft,
+          width,
+          opacity: 1,
+        });
       });
+      return () => cancelAnimationFrame(frame);
     }
   }, [selected]);
 
@@ -71,10 +81,13 @@ export const SlideTabs = ({ tabs, activeTab = 0, onTabChange, className = "" }: 
   );
 };
 
-const Tab = React.forwardRef<
-  HTMLLIElement,
-  { children: React.ReactNode; setPosition: (pos: any) => void; onClick: () => void }
->(({ children, setPosition, onClick }, ref) => {
+interface TabProps {
+  children: React.ReactNode;
+  setPosition: (pos: Position) => void;
+  onClick: () => void;
+}
+
+const Tab = React.forwardRef<HTMLLIElement, TabProps>(({ children, setPosition, onClick }, ref) => {
   return (
     <li
       ref={ref}
@@ -100,7 +113,7 @@ const Tab = React.forwardRef<
 
 Tab.displayName = "Tab";
 
-const Cursor = ({ position }: { position: any }) => {
+const Cursor = ({ position }: { position: Position }) => {
   return (
     <motion.li
       animate={{

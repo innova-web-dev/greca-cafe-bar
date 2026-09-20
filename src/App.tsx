@@ -9,13 +9,15 @@ export default function App() {
     <>
       <main className="min-h-screen font-sans">
         <ScrollExpandMedia
-          mediaType="video"
-          mediaSrc={{
-            webm: "/videocafe.webm",
-            mp4: "/videocafe.mp4"
+          mediaType="canvas-sequence"
+          frameSequence={{
+            frameCount: 144,
+            fps: 18,
+            prefix: "/frames/frame_",
+            extension: ".webp"
           }}
           posterSrc="/poster.avif"
-          bgImageSrc="/arepa.png"
+          bgImageSrc="/arepa.webp"
           className="bg-green-dark"
           textBlend
         />

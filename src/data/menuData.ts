@@ -97,7 +97,7 @@ export const menuCategories: MenuCategory[] = [
   {
     id: 'cafes',
     title: 'CAFÉS',
-    image: '/frappe.jpg',
+    image: '/frappe.webp',
     subcategories: [
       {
         title: 'CALIENTES',
@@ -143,7 +143,7 @@ export const menuCategories: MenuCategory[] = [
   {
     id: 'bebidas',
     title: 'BEBIDAS',
-    image: '/tenders.jpg',
+    image: '/tenders.webp',
     subcategories: [
       {
         title: 'TÉS / AROMÁTICAS',

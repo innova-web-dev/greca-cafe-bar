@@ -124,9 +124,13 @@ export default function FooterSection() {
         </motion.div>
 
         {/* Bottom bar */}
-        <div className="mt-20 pt-6 border-t border-cream text-center">
-          <p className="text-cream text-[10px] tracking-[0.15em]" style={{ fontFamily: 'var(--font-sans)' }}>
+        <div className="mt-20 pt-6 border-t border-cream/20 text-center space-y-2">
+          <p className="text-cream/60 text-[10px] tracking-[0.15em] uppercase" style={{ fontFamily: 'var(--font-sans)' }}>
             © 2026 GRECA CAFÉ BAR — Todos los derechos reservados
+          </p>
+          <p className="text-cream/80 text-[11px] tracking-wider" style={{ fontFamily: 'var(--font-sans)' }}>
+            Creado por <span className="text-cream font-medium">Santiago Prada Moreno</span> y{' '}
+            <span className="text-cream font-medium">Danna Sofia Arias Montes</span>
           </p>
         </div>
       </div>

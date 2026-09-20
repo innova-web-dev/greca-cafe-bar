@@ -30,11 +30,6 @@ export default function CanvasFramePlayer({
   const lastFrameTimeRef = useRef(0);
   const isVisibleRef = useRef(true);
 
-  // Helper to format frame filename e.g. /frames/frame_001.webp
-  const getFrameUrl = (index: number) => {
-    const padded = (index + 1).toString().padStart(3, '0');
-    return `${framePrefix}${padded}${frameExtension}`;
-  };
 
   // Draw a specific image using object-fit: cover
   const drawFrame = (img: HTMLImageElement) => {
@@ -98,6 +93,12 @@ export default function CanvasFramePlayer({
   useEffect(() => {
     let isCancelled = false;
     imagesRef.current = new Array(frameCount).fill(null);
+
+    // Helper to format frame filename e.g. /frames/frame_001.webp
+    const getFrameUrl = (index: number) => {
+      const padded = (index + 1).toString().padStart(3, '0');
+      return `${framePrefix}${padded}${frameExtension}`;
+    };
 
     // 1. Load the first frame immediately for instant display
     const firstImg = new Image();
